@@ -14,9 +14,15 @@ A simple, elegant bash script to backup and restore your Hyprland configuration 
 
 ## Requirements 📋
 
-- Arch Linux with Hyprland installed
-- `bash`, `tar`, `gzip`
-- `hyprctl` command available
+- **Hyprland installed** on Arch Linux (or compatible distro)
+- **Active Hyprland session** (graphical environment, NOT TTY)
+- Commands: `bash`, `tar`, `gzip`, `hyprctl`
+- At least 1 GB free disk space for backups
+
+⚠️ **IMPORTANT**: This script MUST be run from an active Hyprland session (GUI). It will NOT work in:
+- TTY (Ctrl+Alt+F3-F6)
+- SSH sessions without X11 forwarding
+- Other window managers (GNOME, KDE, etc.)
 
 Install on Arch:
 ```bash
@@ -27,18 +33,21 @@ sudo pacman -S hyprland base-devel
 
 1. Clone or download the script:
 ```bash
-# Download
-wget https://github.com/arsenuz100/Hyprland-Backup-Manager/backup.sh
+# Clone repository
+git clone https://github.com/arsenuz100/Hyprland-Backup-Manager.git
 
-# Or copy the script content
-nano ~/backup.sh
-chmod +x ~/backup.sh
+# Or just download the script
+wget https://raw.githubusercontent.com/arsenuz100/Hyprland-Backup-Manager/main/backup.sh
+chmod +x backup.sh
 ```
 
-2. Run it:
+2. Make it executable and run **from Hyprland GUI** (not TTY):
 ```bash
+chmod +x ./backup.sh
 ./backup.sh
 ```
+
+⚠️ **Must be run from Hyprland GUI session, not TTY!**
 
 ## Usage 🎯
 
@@ -129,8 +138,10 @@ All backups are stored in:
 3. **Restore**: 
    - Saves current config as `error_*.tar.gz`
    - Extracts selected backup
-   - Runs `hyprctl reload` automatically
+   - Runs `hyprctl reload` automatically (requires active Hyprland session)
 4. **Delete**: Select multiple backups by number
+
+⚠️ **Note**: Script checks if Hyprland config exists before starting. If it fails, you're not in a Hyprland session.
 
 ## Safety ✅
 
@@ -144,13 +155,24 @@ All backups are stored in:
 **"No backups found"**
 - Create your first backup: Choose option 1
 
-**"Hyprctl reload" command not found**
-- Make sure you're in an active Hyprland session
-- Not available in TTY or other window managers
+**"Error: Hyprland config not found"**
+- Make sure you're running the script from an active Hyprland session (GUI)
+- NOT from TTY (Ctrl+Alt+F3)
+- Reinstall Hyprland if necessary
+
+**"Hyprctl reload" command not found or fails**
+- ❌ You're NOT in an active Hyprland session
+- ❌ You're in TTY mode (Ctrl+Alt+F3-F6) - switch back to GUI (Ctrl+Alt+F2)
+- ❌ Hyprland crashed - restart it
+- Run: `systemctl --user status hyprland` to check status
+
+**Script exits immediately**
+- Make sure `~/.config/hypr` directory exists
+- Create backup from Hyprland settings before using script
 
 **Wrong backup restored**
 - Don't panic! Your current config was saved as `error_*.tar.gz`
-- Restore from that backup
+- Restore from that backup (option 3)
 
 ## Customization 🎨
 
@@ -164,6 +186,8 @@ Edit the script to change:
 - Keep only last 5-10 backups (use delete option)
 - Backup regularly (weekly recommended)
 - Share backups safely with others
+- **Run only from Hyprland GUI session** - use GUI login screen or `startx hyprland`
+- **Cannot run in TTY** (Ctrl+Alt+F3) - switch to GUI with Alt+F2 or restart
 
 ## License 📄
 

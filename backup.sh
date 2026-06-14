@@ -4,6 +4,13 @@ BACKUP_DIR="$HOME/.config/hyprland_backups"
 HYPR_CONFIG="$HOME/.config/hypr"
 mkdir -p "$BACKUP_DIR"
 
+# Check if Hyprland config exists
+if [ ! -d "$HYPR_CONFIG" ]; then
+    echo "❌ Error: Hyprland config not found at $HYPR_CONFIG"
+    echo "Make sure you're in an active Hyprland session."
+    exit 1
+fi
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 CYAN='\033[0;36m'
